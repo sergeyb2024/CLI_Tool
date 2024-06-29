@@ -1,14 +1,19 @@
 package main
 
+//typeof pck reflect
+
 import (
 	"fmt"
+	"reflect"
+	"strings"
 	"unicode"
 )
 
-func IsLower(s string) string {
-	var upper = "/[[:upper:]]+/g" 
-	var lower = "/[[:lower:]]+/g"
-    for _, r := range s {
+// func ProcessCase(a string, b string ) string {
+func ProcessCase(a string) string {
+    upper := "[[:upper:]]+"
+    lower := "[[:lower:]]+"
+    for _, r := range a {
         if !unicode.IsLower(r) && unicode.IsLetter(r) {
             return upper
         }
@@ -16,26 +21,37 @@ func IsLower(s string) string {
     return lower
 }
 
-func putIntoArray(s string) string {
-	var arr []string
-	var characters string
-	for _, c := range s {
-		arr = append(arr, string(c))
-	}
-	for _, arrayItem := range arr {
-		characters = arrayItem
-	}
-	fmt.Println(characters)
-	return IsLower(characters)
+func ProcessString(s string) string {
+	
+	alphabet := "abcdefghijklmnopqrstuvwxyz"
+	alphabetSplit := strings.Split(alphabet, "")
+
+	inputLetters := strings.Split(s, "")
+	fmt.Println("2", alphabetSplit)
+	
+	
+    var result string
+    for _, userInputSplit := range s {
+		fmt.Println("user", reflect.TypeOf(inputLetters))
+		// result nonWordCharacter
+		for _, letterOfAlphabet := range alphabetSplit{
+			// nonWordCharacter := 0
+			fmt.Println("letters", reflect.TypeOf(letterOfAlphabet))
+			
+			if letterOfAlphabet == alphabetSplit[1] {
+				// nonWordCharacter = 0
+				result += ProcessCase(string(userInputSplit))
+				break
+			}
+		}
+    }
+	return ""
 }
 
-
 func main() {
-	var word string
-	for _, c := range word  {
-		IsLower(string(c))
-	}
-	
-	fmt.Scanln(&word)
-	putIntoArray(word)
+    var word string
+    fmt.Println("enter word or sentence")
+    fmt.Scanln(&word)
+    sendIt := ProcessString(word)
+    fmt.Println("Result:", sendIt)
 }
