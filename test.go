@@ -1,57 +1,57 @@
 package main
 
-//typeof pck reflect
-
 import (
 	"fmt"
-	"reflect"
 	"strings"
 	"unicode"
 )
 
-// func ProcessCase(a string, b string ) string {
-func ProcessCase(a string) string {
-    upper := "[[:upper:]]+"
+func ProcessCase(s string) string {
+	upper := "[[:upper:]]+"
     lower := "[[:lower:]]+"
-    for _, r := range a {
-        if !unicode.IsLower(r) && unicode.IsLetter(r) {
-            return upper
-        }
-    }
-    return lower
+	nonword := "[^[:word]]+"
+
+	for _, c := range s{
+		if unicode.IsUpper(c){
+			return upper
+		} else if unicode.IsLower(c){
+			return lower
+		} else if !unicode.IsLetter(c) {
+			return nonword
+		}
+	}
+	return "none"
 }
 
-func ProcessString(s string) string {
-	
+func ProcessString(s string)string{
 	alphabet := "abcdefghijklmnopqrstuvwxyz"
 	alphabetSplit := strings.Split(alphabet, "")
+	alphabetMap := make(map[string]bool)
+	inputString := strings.Split(s, "")
 
-	inputLetters := strings.Split(s, "")
-	fmt.Println("2", alphabetSplit)
-	
-	
-    var result string
-    for _, userInputSplit := range s {
-		fmt.Println("user", reflect.TypeOf(inputLetters))
-		// result nonWordCharacter
-		for _, letterOfAlphabet := range alphabetSplit{
-			// nonWordCharacter := 0
-			fmt.Println("letters", reflect.TypeOf(letterOfAlphabet))
-			
-			if letterOfAlphabet == alphabetSplit[1] {
-				// nonWordCharacter = 0
-				result += ProcessCase(string(userInputSplit))
-				break
-			}
+	for _, alphabetChar := range alphabetSplit{
+		alphabetMap[alphabetChar] = true
+		alphabetMap[strings.ToUpper(alphabetChar)] = true
+	}
+
+	var result string
+
+	for _, inputChar := range inputString{
+		if _, exists := alphabetMap[inputChar]; exists {
+			result += ProcessCase(inputChar)
+		} else {
+			result += "[^[:word]]+"
 		}
-    }
-	return ""
+	}
+	return result
 }
 
-func main() {
-    var word string
-    fmt.Println("enter word or sentence")
-    fmt.Scanln(&word)
-    sendIt := ProcessString(word)
-    fmt.Println("Result:", sendIt)
+
+func main(){
+	var word string
+	fmt.Println("Enter word or sentence")
+	fmt.Scanln(&word)
+	
+	sendIt := ProcessString(word)
+	fmt.Println("regex:", sendIt)
 }
